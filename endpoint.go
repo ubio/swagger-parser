@@ -17,19 +17,18 @@ type Example struct {
 }
 
 type Endpoint struct {
-	Server                  string
-	Path                    string
-	Method                  string
-	Info                    *openapi3.Operation
-	Params                  map[string][]Param
-	QueryParams             string
-	HeaderParams            string
-	Curl                    string
-	RequestParams           RequestParams
-	RequestParamsMarshalled string
-	RequestExamples         RequestExamples
-	ResponseExamples        ResponseExamples // this is rendered in a slot
-	ResponseExampleKeys     string           // this is passed to Vue as a csv
+	Server              string
+	Path                string
+	Method              string
+	Info                *openapi3.Operation
+	Params              map[string][]Param
+	QueryParams         []Param
+	HeaderParams        []Param
+	Curl                string
+	RequestParams       RequestParams
+	RequestExamples     RequestExamples
+	ResponseExamples    ResponseExamples // this is rendered in a slot
+	ResponseExampleKeys string           // this is passed to Vue as a csv
 }
 
 type ResponseExamples []ResponseExample

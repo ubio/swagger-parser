@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -86,22 +85,13 @@ func (tpl *PageTemplate) parsePage(page Page) {
 					}
 				}
 
-				queryParamBytes, err := json.Marshal(queryParams)
-				if err != nil {
-					log.Fatal(err)
-				}
-				headerParamBytes, err := json.Marshal(headerParams)
-				if err != nil {
-					log.Fatal(err)
-				}
-
 				endpoint := &Endpoint{
 					Path:         path,
 					Method:       p.Method,
 					Info:         matched,
 					Params:       params,
-					QueryParams:  sanitizeData(string(queryParamBytes)),
-					HeaderParams: sanitizeData(string(headerParamBytes)),
+					QueryParams:  queryParams,
+					HeaderParams: headerParams,
 				}
 				endpoint.requestBody(matched)
 				endpoint.requestBodyExamples(matched)
@@ -143,11 +133,6 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 			}
 			e.RequestParams = append(e.RequestParams, p)
 		}
-		marshalled, err := json.Marshal(e.RequestParams)
-		if err != nil {
-			log.Fatal(err)
-		}
-		e.RequestParamsMarshalled = sanitizeData(string(marshalled))
 	}
 }
 
@@ -300,8 +285,4 @@ func (e *Endpoint) generateResponseExamples(operation *openapi3.Operation) {
 			})
 		}
 	}
-}
-
-func sanitizeData(input string) string {
-	return base64.StdEncoding.EncodeToString([]byte(input))
 }
