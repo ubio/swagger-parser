@@ -29,3 +29,23 @@ swagger-parser
     --output ./path/to/output.md
 ```
 
+## Pages File
+
+The `pages` file is an opinionated YAML file that contains the configuration f which pages to generate. For example:
+
+```yaml
+// pets.yaml
+
+pages:
+  - name: Pets
+    filename: pets.md
+    description: |
+      Pets are excellent friends. Why not get one via the API.
+    paths:
+      - method: get
+        path: /pets
+      - method: post
+        path: /pets
+```
+
+Will generate a page and include the `GET /pets` and `POST /pets` spec in the output passed to the go template file, where the `name` and `description` will also be printed.
