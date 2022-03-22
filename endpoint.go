@@ -1,9 +1,6 @@
 package main
 
 import (
-	"log"
-	"text/template"
-
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
@@ -45,16 +42,6 @@ type ResponseExample struct {
 
 type Server struct {
 	URL string `json:"url"`
-}
-
-func main() {
-
-	endpointTemplate, err = template.ParseFiles(goTemplate)
-	if err != nil {
-		log.Fatal(err)
-	}
-	pages := getPages()
-	parsePages(pages)
 }
 
 type RequestParams []RequestParam

@@ -39,6 +39,16 @@ func init() {
 	}
 }
 
+func main() {
+
+	endpointTemplate, err = template.ParseFiles(goTemplate)
+	if err != nil {
+		log.Fatal(err)
+	}
+	pages := getPages()
+	parsePages(pages)
+}
+
 func parseFlags() {
 	apiNameFlag := flag.String("name", "", "The name of the API")                  // the name of the API
 	templateFileFlag := flag.String("template", "", "The Go template file to use") // the go template
