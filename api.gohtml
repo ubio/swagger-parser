@@ -1,0 +1,41 @@
+# {{ .Title }}
+
+{{ .Description }}
+
+{{ range .Endpoints }}
+<hr />
+
+## {{ .Info.Summary }}
+
+<api-endpoint
+    server="{{ .Server }}"
+    summary="{{ .Info.Summary }}"
+    method="{{ .Method }}" 
+    path="{{ .Path }}" 
+    queryParams="{{ .QueryParams }}" 
+    headerParams="{{ .HeaderParams }}" 
+    requestParams="{{ .RequestParamsMarshalled }}"
+    body="application/json" 
+    title="{{ .Info.Summary }}"
+    description="{{ .Info.Description }}"
+    responseExampleKeys="{{ .ResponseExampleKeys }}"
+/>
+
+::: slot request-curl
+```bash
+{{ .Curl }}
+```
+:::
+
+{{ range .ResponseExamples }}
+::: slot response-{{ .Key }}-code
+```json
+{{ .Value }}
+```
+:::
+
+::: slot response-{{ .Key }}-summary
+👆 {{ .Summary }}
+:::
+{{ end }}
+{{ end }}
