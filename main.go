@@ -49,23 +49,20 @@ var (
 //
 func init() {
 
-	// get the name of the API
+	// the name of the API
 	nameFlag := flag.String("name", "", "")
-	// get the go template
+	// the go template
 	templateFlag := flag.String("template", "", "")
+	// the pages yaml file
+	pagesFlag := flag.String("pages", "", "")
+	// the swagger yaml file
+	schemaFlag := flag.String("schema", "", "")
 	flag.Parse()
 
 	name = *nameFlag
 	goTemplate = *templateFlag
-
-	// set the base directory for this API from the name
-	baseDir := fmt.Sprintf("schemas/%s", name)
-
-	// set the schema file from the name
-	schemaFile = fmt.Sprintf("%s/schema.yaml", baseDir)
-
-	// set the pages file from the name
-	pagesFile = fmt.Sprintf("%s/pages.yaml", baseDir)
+	pagesFile = *pagesFlag
+	schemaFile = *schemaFlag
 
 	// check the schema exists from the name
 	if _, err := os.Stat(schemaFile); err != nil {
