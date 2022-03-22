@@ -110,7 +110,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 		}
 	}
 
-	f, err := os.Create(fmt.Sprintf("%s%s%s", outputDir, baseDir, page.Filename))
+	f, err := os.Create(fmt.Sprintf("%s%s", outputDir, page.Filename))
 	if err != nil {
 		log.Fatal(err)
 	}

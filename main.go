@@ -16,23 +16,19 @@ import (
 // Always expect errors
 var err error
 
-// name is the name of the swagger and pages file to parse as an input
-var name string
-
-// template is the name of the Go template
-var goTemplate string
+var (
+	name       string
+	goTemplate string
+	pagesFile  string
+	schemaFile string
+	outputDir  string
+)
 
 // the ref to swagger.T
 var swagger *openapi3.T
 
-// outputDir tells us where to write files
-var outputDir string
-
 // these vars are based on $name and point to the relevant pages exist
 var (
-	schemaFile       string
-	baseDir          string
-	pagesFile        string
 	endpointTemplate *template.Template
 )
 
@@ -57,12 +53,16 @@ func init() {
 	pagesFlag := flag.String("pages", "", "")
 	// the swagger yaml file
 	schemaFlag := flag.String("schema", "", "")
+	// the output dir
+	outputFlag := flag.String("output", "", "")
 	flag.Parse()
 
 	name = *nameFlag
 	goTemplate = *templateFlag
 	pagesFile = *pagesFlag
 	schemaFile = *schemaFlag
+	outputDir = *outputFlag
+	outputDir = fmt.Sprintf("./%s/%s/", outputDir, name)
 
 	// check the schema exists from the name
 	if _, err := os.Stat(schemaFile); err != nil {
@@ -79,8 +79,6 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	outputDir = fmt.Sprintf("./src/%s/", name)
 }
 
 type Param struct {
