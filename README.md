@@ -49,3 +49,14 @@ pages:
 ```
 
 Will generate a page and include the `GET /pets` and `POST /pets` spec in the output passed to the go template file, where the `name` and `description` will also be printed.
+
+## Example
+
+```bash
+go run *.go \
+    --name pets \
+    --template ./example/template.gohtml \
+    --pages ./example/pets.yaml \
+    --schema ./example/schema.yaml \
+    --output ./example/output
+```

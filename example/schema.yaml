@@ -1,0 +1,76 @@
+openapi: 3.0.0
+info:
+  title: Animals API
+  description: Everyone loves animals.
+  version: 1.0.0
+
+servers:
+  - url: https://animals.example.com
+    description: Animals API
+
+paths:
+  /pets:
+    post:
+      summary: Create Pet
+      description: Create a new pet
+      servers:
+        - url: https://animals.example.com
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            format: basic
+          description: The basic authorization header to authorize against the API
+          example:
+            value: "Authorization: Basic QVBJX0tFWTo="
+        - in: header
+          name: ContentType
+          required: true
+          schema:
+            type: string
+            format: basic
+          description: The request content type
+          example:
+            value: "Content-Type: application/json"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: The name of your pet
+                  example: "Garfield"
+                type:
+                  type: string
+                  description: The type of pet you want
+                  enum:
+                    - cat
+                    - dog
+                  example: "cat"
+            examples:
+              curl:
+                value: { "name": "Garfield", "type": "cat" }
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+              example:
+                name: Garfield
+                type: cat
+          examples:
+            success:
+              summary: The pet has been created
+              value: { "name": "Garfield", "type": "cat" }

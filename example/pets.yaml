@@ -1,0 +1,8 @@
+pages:
+  - name: Pets
+    filename: pets.md
+    description: |
+      Pets are excellent friends. Why not get one via the API.
+    paths:
+      - method: post
+        path: /pets
