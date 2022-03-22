@@ -19,16 +19,14 @@ var err error
 // name is the name of the swagger and pages file to parse as an input
 var name string
 
+// template is the name of the Go template
+var goTemplate string
+
 // the ref to swagger.T
 var swagger *openapi3.T
 
 // outputDir tells us where to write files
 var outputDir string
-
-const (
-	// API_REF is the template to use for the docs
-	API_REF = "./cmd/parse-swagger/api.gohtml"
-)
 
 // these vars are based on $name and point to the relevant pages exist
 var (
@@ -53,9 +51,12 @@ func init() {
 
 	// get the name of the API
 	nameFlag := flag.String("name", "", "")
+	// get the go template
+	templateFlag := flag.String("template", "", "")
 	flag.Parse()
 
 	name = *nameFlag
+	goTemplate = *templateFlag
 
 	// set the base directory for this API from the name
 	baseDir := fmt.Sprintf("schemas/%s", name)
@@ -127,7 +128,7 @@ type Server struct {
 
 func main() {
 
-	endpointTemplate, err = template.ParseFiles(API_REF)
+	endpointTemplate, err = template.ParseFiles(goTemplate)
 	if err != nil {
 		log.Fatal(err)
 	}
