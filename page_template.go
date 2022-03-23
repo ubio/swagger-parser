@@ -132,23 +132,22 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 			}
 
 			exampleString := string(param.Value.Example.(string))
-			exampleObjectString := ""
+			exampleJSONString := ""
 
-			// check if this looks like a json object
+			// check if this looks like json
 			if isJSON(exampleString) {
 				escaped := template.HTMLEscaper(exampleString)
-				fmt.Println(escaped)
-				exampleObjectString = escaped
+				exampleJSONString = escaped
 				exampleString = ""
 			}
 
 			p := RequestParam{
-				Name:          k,
-				Type:          param.Value.Type,
-				Example:       exampleString,
-				ExampleObject: exampleObjectString,
-				Description:   param.Value.Description,
-				Required:      required,
+				Name:        k,
+				Type:        param.Value.Type,
+				Example:     exampleString,
+				ExampleJSON: exampleJSONString,
+				Description: param.Value.Description,
+				Required:    required,
 			}
 			e.RequestParams = append(e.RequestParams, p)
 		}
