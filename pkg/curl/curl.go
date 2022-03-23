@@ -51,8 +51,10 @@ func (c *Command) addParams(paramType string) {
 
 	if len(params) > 0 {
 
+		c.ExampleString += ` \`
+
 		if paramType == "query" {
-			c.ExampleString += ` \
+			c.ExampleString += `
 		-G \`
 		}
 
