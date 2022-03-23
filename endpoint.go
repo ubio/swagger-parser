@@ -35,12 +35,13 @@ type Server struct {
 type RequestParams []RequestParam
 
 type RequestParam struct {
-	Name        string      `json:"name"`
-	Description string      `json:"description"`
-	Type        string      `json:"type"`
-	Example     interface{} `json:"example"`
-	Enum        []string    `json:"enum"`
-	Required    bool        `json:"required"`
+	Name          string      `json:"name"`
+	Description   string      `json:"description"`
+	Type          string      `json:"type"`
+	Example       string      `json:"example"`
+	ExampleObject interface{} `json:"example"`
+	Enum          []string    `json:"enum"`
+	Required      bool        `json:"required"`
 }
 
 type Endpoint struct {

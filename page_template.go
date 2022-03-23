@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"sort"
+	"text/template"
 
 	"github.com/getkin/kin-openapi/openapi3"
 )
@@ -115,6 +116,11 @@ func (tpl *PageTemplate) parsePage(page Page) {
 	}
 }
 
+func isJSON(str string) bool {
+	var js json.RawMessage
+	return json.Unmarshal([]byte(str), &js) == nil
+}
+
 func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 	if operation.RequestBody != nil {
 		properties := operation.RequestBody.Value.Content["application/json"].Schema.Value.Properties
@@ -124,13 +130,25 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 			if contains(requiredFields, k) {
 				required = true
 			}
+
+			exampleString := string(param.Value.Example.(string))
+			exampleObjectString := ""
+
+			// check if this looks like a json object
+			if isJSON(exampleString) {
+				escaped := template.HTMLEscaper(exampleString)
+				fmt.Println(escaped)
+				exampleObjectString = escaped
+				exampleString = ""
+			}
+
 			p := RequestParam{
-				Name:    k,
-				Type:    param.Value.Type,
-				Example: param.Value.Example,
-				// Example:     string(param.Value.Example.(string)),
-				Description: param.Value.Description,
-				Required:    required,
+				Name:          k,
+				Type:          param.Value.Type,
+				Example:       exampleString,
+				ExampleObject: exampleObjectString,
+				Description:   param.Value.Description,
+				Required:      required,
 			}
 			e.RequestParams = append(e.RequestParams, p)
 		}
