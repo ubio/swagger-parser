@@ -96,7 +96,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 				endpoint.requestBody(matched)
 				endpoint.requestBodyExamples(matched)
 				endpoint.setServer(matched)
-				endpoint.curlExample(matched)
+				endpoint.createExample("curl")
 				endpoint.generateResponseExamples(matched)
 
 				pageTemplate.Endpoints = append(pageTemplate.Endpoints, *endpoint)
@@ -125,9 +125,10 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 				required = true
 			}
 			p := RequestParam{
-				Name:        k,
-				Type:        param.Value.Type,
-				Example:     param.Value.Example,
+				Name:    k,
+				Type:    param.Value.Type,
+				Example: param.Value.Example,
+				// Example:     string(param.Value.Example.(string)),
 				Description: param.Value.Description,
 				Required:    required,
 			}
@@ -191,53 +192,6 @@ func (e *Endpoint) setServer(operation *openapi3.Operation) {
 		}
 	}
 	e.Server = server
-}
-
-func (e *Endpoint) curlExample(operation *openapi3.Operation) {
-	curl := fmt.Sprintf(`curl -X %s '%s%s' \`, e.Method, e.Server, e.Path)
-	for i, param := range e.Params["header"] {
-		if param.Example != "" {
-			curl += fmt.Sprintf(`
-	-H '%s'`, param.Example)
-		}
-		if i != len(e.Params["header"])-1 {
-			curl += ` \`
-			continue
-		}
-		if len(e.Params["query"]) > 0 {
-			curl += ` \`
-		}
-	}
-	if len(e.Params["query"]) > 0 {
-		curl += `
-	-G \`
-	}
-	for i, param := range e.Params["query"] {
-		if param.Example != "" {
-			curl += fmt.Sprintf(`
-	-d '%s'`, param.Example)
-		}
-		if i != len(e.Params["query"])-1 {
-			curl += ` \`
-		}
-	}
-	if len(e.RequestExamples) > 0 {
-		for _, example := range e.RequestExamples {
-			if example.Key == "curl" {
-
-				val, err := json.MarshalIndent(example.RawValue, "    ", "    ")
-				if err != nil {
-					log.Fatal(err)
-				}
-				curl += fmt.Sprintf(`
-	-d@- <<EOF
-	%s
-EOF`, string(val))
-			}
-		}
-	}
-
-	e.Curl = curl
 }
 
 func (e *Endpoint) generateResponseExamples(operation *openapi3.Operation) {
