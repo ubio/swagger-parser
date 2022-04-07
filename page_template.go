@@ -76,6 +76,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 							Description: param.Value.Description,
 							Type:        param.Value.Schema.Value.Type,
 							Format:      param.Value.Schema.Value.Format,
+							EnumJSON:    getEnumJSON(param.Value.Schema.Value.Enum),
 							Example:     example.Value,
 						}
 						params[param.Value.In] = append(params[param.Value.In], p)
@@ -126,6 +127,22 @@ func isJSON(str string) bool {
 	return json.Unmarshal([]byte(str), &js) == nil
 }
 
+func getEnumJSON(params []interface{}) string {
+	escapedEnumJSONString := ""
+	enum := make([]string, 0)
+	for _, e := range params {
+		enum = append(enum, fmt.Sprintf("%v", e))
+	}
+	if len(enum) == 0 {
+		return escapedEnumJSONString
+	}
+	b, err := json.Marshal(enum)
+	if err == nil {
+		escapedEnumJSONString = template.HTMLEscaper(string(b))
+	}
+	return escapedEnumJSONString
+}
+
 func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 	if operation.RequestBody != nil {
 		properties := operation.RequestBody.Value.Content["application/json"].Schema.Value.Properties
@@ -153,6 +170,7 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 				ExampleJSON: exampleJSONString,
 				Description: param.Value.Description,
 				Required:    required,
+				EnumJSON:    getEnumJSON(param.Value.Enum),
 			}
 			e.RequestParams = append(e.RequestParams, p)
 		}

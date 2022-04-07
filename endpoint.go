@@ -15,6 +15,7 @@ type Param struct {
 	Type        string `json:"type"`
 	Format      string `json:"format"`
 	Example     string `json:"example"`
+	EnumJSON    string `json:"enum_json"`
 }
 
 type Example struct {
@@ -42,6 +43,7 @@ type RequestParam struct {
 	Example     string `json:"example"`
 	ExampleJSON interface{}
 	Enum        []string `json:"enum"`
+	EnumJSON    string   `json:"enum_json"`
 	Required    bool     `json:"required"`
 }
 
