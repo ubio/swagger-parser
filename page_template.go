@@ -70,6 +70,9 @@ func (tpl *PageTemplate) parsePage(page Page) {
 						if err := json.Unmarshal(exampleBody, &example); err != nil {
 							log.Fatal(err)
 						}
+						max := param.Value.Schema.Value.Max
+						min := param.Value.Schema.Value.Min
+						defaultVal := param.Value.Schema.Value.Default
 						p := Param{
 							Name:        param.Value.Name,
 							Required:    param.Value.Required,
@@ -78,6 +81,9 @@ func (tpl *PageTemplate) parsePage(page Page) {
 							Format:      param.Value.Schema.Value.Format,
 							EnumJSON:    getEnumJSON(param.Value.Schema.Value.Enum),
 							Example:     example.Value,
+							MaxItems:    max,
+							MinItems:    min,
+							Default:     defaultVal,
 						}
 						params[param.Value.In] = append(params[param.Value.In], p)
 						switch param.Value.In {

@@ -9,13 +9,16 @@ import (
 )
 
 type Param struct {
-	Name        string `json:"name"`
-	Required    bool   `json:"required"`
-	Description string `json:"description"`
-	Type        string `json:"type"`
-	Format      string `json:"format"`
-	Example     string `json:"example"`
-	EnumJSON    string `json:"enum_json"`
+	Name        string      `json:"name"`
+	Required    bool        `json:"required"`
+	Description string      `json:"description"`
+	Type        string      `json:"type"`
+	Format      string      `json:"format"`
+	Example     string      `json:"example"`
+	EnumJSON    string      `json:"enum_json"`
+	MaxItems    *float64    `json:"max_items"`
+	MinItems    *float64    `json:"min_items"`
+	Default     interface{} `json:"default"`
 }
 
 type Example struct {
@@ -40,11 +43,15 @@ type RequestParam struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Type        string `json:"type"`
+	Format      string `json:"format"`
 	Example     string `json:"example"`
 	ExampleJSON interface{}
-	Enum        []string `json:"enum"`
-	EnumJSON    string   `json:"enum_json"`
-	Required    bool     `json:"required"`
+	Enum        []string    `json:"enum"`
+	EnumJSON    string      `json:"enum_json"`
+	Required    bool        `json:"required"`
+	MaxItems    *float64    `json:"max_items"`
+	MinItems    *float64    `json:"min_items"`
+	Default     interface{} `json:"default"`
 }
 
 type Endpoint struct {
