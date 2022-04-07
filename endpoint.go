@@ -13,6 +13,7 @@ type Param struct {
 	Required    bool   `json:"required"`
 	Description string `json:"description"`
 	Type        string `json:"type"`
+	Format      string `json:"format"`
 	Example     string `json:"example"`
 }
 

@@ -75,6 +75,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 							Required:    param.Value.Required,
 							Description: param.Value.Description,
 							Type:        param.Value.Schema.Value.Type,
+							Format:      param.Value.Schema.Value.Format,
 							Example:     example.Value,
 						}
 						params[param.Value.In] = append(params[param.Value.In], p)
