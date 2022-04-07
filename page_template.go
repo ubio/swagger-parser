@@ -57,6 +57,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 
 				queryParams := make([]Param, 0)
 				headerParams := make([]Param, 0)
+				pathParams := make([]Param, 0)
 				params := make(map[string][]Param)
 				if matched != nil {
 					for _, param := range matched.Parameters {
@@ -82,6 +83,8 @@ func (tpl *PageTemplate) parsePage(page Page) {
 							queryParams = append(queryParams, p)
 						case "header":
 							headerParams = append(headerParams, p)
+						case "path":
+							pathParams = append(pathParams, p)
 						}
 					}
 				}
@@ -93,6 +96,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 					Params:       params,
 					QueryParams:  queryParams,
 					HeaderParams: headerParams,
+					PathParams:   pathParams,
 				}
 				endpoint.requestBody(matched)
 				endpoint.requestBodyExamples(matched)

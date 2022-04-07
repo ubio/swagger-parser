@@ -52,6 +52,7 @@ type Endpoint struct {
 	Params              map[string][]Param
 	QueryParams         []Param
 	HeaderParams        []Param
+	PathParams          []Param
 	Curl                string
 	RequestParams       RequestParams
 	RequestExamples     RequestExamples
