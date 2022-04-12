@@ -61,7 +61,7 @@ func (c *Command) addParams(paramType string) {
 		for i, param := range params {
 			if param != "" {
 				c.ExampleString += fmt.Sprintf(`
-		-%s '%s'`, curlFlag, param)
+		%s '%s'`, curlFlag, param)
 				if i != len(params)-1 {
 					c.ExampleString += ` \`
 					continue
