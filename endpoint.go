@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
+	"strings"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/ubio/swagger-parser/pkg/curl"
@@ -79,11 +81,26 @@ func (e *Endpoint) createExample(lang string) {
 
 	switch lang {
 	case "curl":
-		c := curl.NewCommand(e.Server, e.Method, e.Path, e.exampleHeaders(), e.exampleQueryParams(), e.exampleRequestBody())
+		c := curl.NewCommand(e.Server, e.Method, e.pathExample(), e.exampleHeaders(), e.exampleQueryParams(), e.exampleRequestBody())
 		example = c.ExampleString
 	}
 
 	e.Examples[lang] = example
+}
+
+// substitute the path params `/path/:id/resource` with the example value
+func (e Endpoint) pathExample() string {
+	parts := strings.Split(e.Path, "/")
+	for i, part := range parts {
+		if strings.HasPrefix(part, ":") {
+			for _, param := range e.PathParams {
+				if fmt.Sprintf(":%s", param.Name) == part {
+					parts[i] = param.Example
+				}
+			}
+		}
+	}
+	return strings.Join(parts, "/")
 }
 
 func (e Endpoint) exampleHeaders() []string {
