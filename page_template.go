@@ -177,6 +177,7 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 				Description: param.Value.Description,
 				Required:    required,
 				EnumJSON:    getEnumJSON(param.Value.Enum),
+				Default:     param.Value.Default,
 			}
 			e.RequestParams = append(e.RequestParams, p)
 		}
