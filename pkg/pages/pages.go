@@ -1,4 +1,4 @@
-package main
+package pages
 
 import (
 	"io/ioutil"
@@ -8,10 +8,10 @@ import (
 )
 
 // Return a list of markdown pages for the API
-func getPages() []Page {
+func GetPages(file string) []Page {
 	pages := Pages{}
 
-	content, err := ioutil.ReadFile(pagesFile)
+	content, err := ioutil.ReadFile(file)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,4 +38,5 @@ type Page struct {
 type Path struct {
 	Method string `yaml:"method"`
 	Path   string `yaml:"path"`
+	Index  int    `yaml:"index"`
 }

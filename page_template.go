@@ -8,16 +8,18 @@ import (
 	"sort"
 	"text/template"
 
+	"github.com/ubio/swagger-parser/pkg/pages"
+
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
 type PageTemplate struct {
 	Title       string
 	Description string
-	Endpoints   []Endpoint
+	Endpoints   map[int]Endpoint
 }
 
-func parsePages(pages []Page) {
+func parsePages(pages []pages.Page) {
 	for _, page := range pages {
 		template := NewPageTemplate()
 		template.parsePage(page)
@@ -28,13 +30,18 @@ func NewPageTemplate() PageTemplate {
 	return PageTemplate{}
 }
 
-func (tpl *PageTemplate) parsePage(page Page) {
+func (tpl *PageTemplate) parsePage(page pages.Page) {
+
+	// sort the paths by the index key
+	sort.Slice(page.Paths, func(i, j int) bool {
+		return page.Paths[i].Index < page.Paths[j].Index
+	})
 
 	// build the template data
 	pageTemplate := PageTemplate{
 		Title:       page.Name,
 		Description: page.Description,
-		Endpoints:   make([]Endpoint, 0),
+		Endpoints:   make(map[int]Endpoint, 0),
 	}
 
 	for path, pathInfo := range swagger.Paths {
@@ -112,7 +119,7 @@ func (tpl *PageTemplate) parsePage(page Page) {
 				endpoint.createExample("curl")
 				endpoint.generateResponseExamples(matched)
 
-				pageTemplate.Endpoints = append(pageTemplate.Endpoints, *endpoint)
+				pageTemplate.Endpoints[p.Index] = *endpoint
 			}
 		}
 	}

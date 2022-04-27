@@ -8,6 +8,7 @@ import (
 	"text/template"
 
 	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/ubio/swagger-parser/pkg/pages"
 )
 
 var (
@@ -45,7 +46,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	pages := getPages()
+	pages := pages.GetPages(pagesFile)
 	parsePages(pages)
 }
 
