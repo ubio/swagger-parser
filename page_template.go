@@ -176,9 +176,14 @@ func (e *Endpoint) requestBody(operation *openapi3.Operation) {
 				exampleString = ""
 			}
 
+			paramType := param.Value.Type
+			if paramType == "array" && param.Value.Items.Value.Type != "" {
+				paramType = "array[" + param.Value.Items.Value.Type + "]"
+			}
+
 			p := RequestParam{
 				Name:        k,
-				Type:        param.Value.Type,
+				Type:        paramType,
 				Example:     exampleString,
 				ExampleJSON: exampleJSONString,
 				Description: param.Value.Description,
