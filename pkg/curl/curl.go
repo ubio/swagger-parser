@@ -29,7 +29,7 @@ func NewCommand(server string, method string, path string, headers []string, que
 }
 
 func (c *Command) GenerateExample() {
-	c.ExampleString = fmt.Sprintf(`curl -X %s '%s%s'`, c.Method, c.Server, c.Path)
+	c.ExampleString = fmt.Sprintf(`curl -X %s '%s%s'`, strings.ToUpper(c.Method), c.Server, c.Path)
 	c.addParams("headers")
 	c.addParams("query")
 	c.addBody()
