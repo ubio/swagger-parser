@@ -21,9 +21,18 @@
 {{ .Curl }}
 ```
 
-## Responses:
+## OK Responses:
 {{ range .ResponseExamples }}
-{{ .Summary }}
+({{ .Status }}) {{ .Summary }}
+
+```json
+{{ .Value }}
+```
+{{ end }}
+
+## Error Responses:
+{{ range .ResponseErrorExamples }}
+({{ .Status }}) {{ .Summary }}
 
 ```json
 {{ .Value }}

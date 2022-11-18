@@ -30,14 +30,33 @@ curl -X post 'https://animals.example.com/pets' \
 EOF
 ```
 
-## Responses:
+## OK Responses:
 
-The pet has been created
+(200) The pet has been created
 
 ```json
 {
     "name": "Garfield",
     "type": "cat"
+}
+```
+
+
+## Error Responses:
+
+(400) The pet has not been created
+
+```json
+{
+    "error": "You need to give your pet a name"
+}
+```
+
+(529) The pet has not been created
+
+```json
+{
+    "error": "You're creating too many pets'"
 }
 ```
 

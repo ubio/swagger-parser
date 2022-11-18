@@ -256,46 +256,74 @@ func (e *Endpoint) setServer(operation *openapi3.Operation) {
 func (e *Endpoint) generateResponseExamples(operation *openapi3.Operation) {
 	e.ResponseExamples = make([]ResponseExample, 0)
 	if operation.Responses != nil {
-		examples := operation.Responses.Get(200).Value.ExtensionProps.Extensions
-		for _, example := range examples {
 
-			mp := make(map[string]interface{})
-			err := json.Unmarshal([]byte(example.(json.RawMessage)), &mp)
-			if err != nil {
-				log.Fatal(err)
+		for i := 200; i < 400; i++ {
+			if operation.Responses.Get(i) != nil {
+				examples := operation.Responses.Get(i).Value.ExtensionProps.Extensions
+				for _, example := range examples {
+					e.ResponseExamples = append(e.ResponseExamples, e.createResponseExample(i, example)...)
+				}
 			}
-			i := 0
-			for k, v := range mp {
-
-				e.ResponseExampleKeys = e.ResponseExampleKeys + k
-				if i != len(mp)-1 {
-					e.ResponseExampleKeys = e.ResponseExampleKeys + ","
-				}
-
-				ex := ResponseExample{
-					Key: k,
-				}
-
-				for k2, v2 := range v.(map[string]interface{}) {
-					switch k2 {
-					case "summary":
-						ex.Summary = v2.(string)
-					case "value":
-						exampleBytes, err := json.MarshalIndent(v2, "", "    ")
-						if err != nil {
-							log.Fatal(err)
-						}
-						ex.Value = string(exampleBytes)
-					}
-				}
-
-				e.ResponseExamples = append(e.ResponseExamples, ex)
-				i++
-			}
-
-			sort.Slice(e.ResponseExamples, func(i, j int) bool {
-				return e.ResponseExamples[i].Key < e.ResponseExamples[j].Key
-			})
 		}
+
+		for i := 400; i < 600; i++ {
+			if operation.Responses.Get(i) != nil {
+				examples := operation.Responses.Get(i).Value.ExtensionProps.Extensions
+				for _, example := range examples {
+					e.ResponseErrorExamples = append(e.ResponseErrorExamples, e.createResponseExample(i, example)...)
+				}
+			}
+		}
+
+		sort.Slice(e.ResponseExamples, func(i, j int) bool {
+			return e.ResponseExamples[i].Key < e.ResponseExamples[j].Key
+		})
+
+		sort.Slice(e.ResponseErrorExamples, func(i, j int) bool {
+			return e.ResponseErrorExamples[i].Key < e.ResponseErrorExamples[j].Key
+		})
+
 	}
+}
+
+func (e *Endpoint) createResponseExample(status int, example interface{}) []ResponseExample {
+
+	exampleOutput := make([]ResponseExample, 0)
+
+	mp := make(map[string]interface{})
+	err := json.Unmarshal([]byte(example.(json.RawMessage)), &mp)
+	if err != nil {
+		log.Fatal(err)
+	}
+	i := 0
+	for k, v := range mp {
+
+		e.ResponseExampleKeys = e.ResponseExampleKeys + k
+		if i != len(mp)-1 {
+			e.ResponseExampleKeys = e.ResponseExampleKeys + ","
+		}
+
+		ex := ResponseExample{
+			Key:    k,
+			Status: status,
+		}
+
+		for k2, v2 := range v.(map[string]interface{}) {
+			switch k2 {
+			case "summary":
+				ex.Summary = v2.(string)
+			case "value":
+				exampleBytes, err := json.MarshalIndent(v2, "", "    ")
+				if err != nil {
+					log.Fatal(err)
+				}
+				ex.Value = string(exampleBytes)
+			}
+		}
+
+		exampleOutput = append(exampleOutput, ex)
+		i++
+	}
+
+	return exampleOutput
 }
