@@ -74,3 +74,37 @@ paths:
             success:
               summary: The pet has been created
               value: { "name": "Garfield", "type": "cat" }
+        "400":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+              example:
+                name: Garfield
+                type: cat
+          examples:
+            success:
+              summary: The pet has not been created
+              value: { "error": "You need to give your pet a name" }
+        "529":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  type:
+                    type: string
+              example:
+                name: Garfield
+                type: cat
+          examples:
+            success:
+              summary: The pet has not been created
+              value: { "error": "You're creating too many pets'" }

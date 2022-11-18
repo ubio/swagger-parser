@@ -33,6 +33,7 @@ type ResponseExample struct {
 	Key     string
 	Value   string
 	Summary string
+	Status  int
 }
 
 type Server struct {
@@ -57,20 +58,21 @@ type RequestParam struct {
 }
 
 type Endpoint struct {
-	Server              string
-	Path                string
-	Method              string
-	Info                *openapi3.Operation
-	Params              map[string][]Param
-	QueryParams         []Param
-	HeaderParams        []Param
-	PathParams          []Param
-	Curl                string
-	RequestParams       RequestParams
-	RequestExamples     RequestExamples
-	ResponseExamples    ResponseExamples // this is rendered in a slot
-	ResponseExampleKeys string           // this is passed to Vue as a csv
-	Examples            map[string]string
+	Server                string
+	Path                  string
+	Method                string
+	Info                  *openapi3.Operation
+	Params                map[string][]Param
+	QueryParams           []Param
+	HeaderParams          []Param
+	PathParams            []Param
+	Curl                  string
+	RequestParams         RequestParams
+	RequestExamples       RequestExamples
+	ResponseExamples      ResponseExamples // this is rendered in a slot
+	ResponseErrorExamples ResponseExamples
+	ResponseExampleKeys   string // this is passed to Vue as a csv
+	Examples              map[string]string
 }
 
 func (e *Endpoint) createExample(lang string) {
